@@ -1,0 +1,15 @@
+services:
+  app_blue:
+    image: ${DOCKER_IMAGE}
+    environment:
+      - PORT=${PORT}
+      - RELEASE_ID=${RELEASE_ID_BLUE}
+    ports:
+      - "8081:80"
+  app_green:
+    image: ${DOCKER_IMAGE}
+    environment:
+      - PORT=${PORT}
+      - RELEASE_ID=${RELEASE_ID_GREEN}
+    ports:
+      - "8082:80"

@@ -1,4 +1,5 @@
 services:
+  # Blue app container
   app_blue:
     image: ${DOCKER_IMAGE}
     environment:
@@ -6,8 +7,9 @@ services:
       - RELEASE_ID=${RELEASE_ID_BLUE}
       - APP_POOL=blue
     ports:
-      - "8081:${PORT}"
+      - "${BLUE_HOST_PORT}:${PORT}"
 
+  # Green app container
   app_green:
     image: ${DOCKER_IMAGE}
     environment:
@@ -15,16 +17,18 @@ services:
       - RELEASE_ID=${RELEASE_ID_GREEN}
       - APP_POOL=green
     ports:
-      - "8082:${PORT}"
+      - "${GREEN_HOST_PORT}:${PORT}"
 
+  # Nginx reverse proxy container
   nginx:
     image: nginx:stable
     ports:
-      - "8080:80"
+      - "${NGINX_HOST_PORT}:${PORT}"
+      - "80:${PORT}"
     depends_on:
       - app_blue
       - app_green
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     environment:
-      - ACTIVE_POOL=${ACTIVE_POOL}
+      - ACTIVE_POOL=${ACTIVE_POOL} 
